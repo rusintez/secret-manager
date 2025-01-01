@@ -4,16 +4,19 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "skt": "./src/cli.ts"
+    "skt": "src/cli.ts"
   },
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "check": "pnpm biome check --fix --unsafe ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "cli",
+    "skt"
+  ],
+  "author": "Vladimir Popov <rusintez@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "@commander-js/extra-typings": "^13.0.0",
     "@hono/zod-validator": "^0.4.2",
