@@ -2,6 +2,12 @@
 
 Use xsalsa20-poly1305 private key encryption and ed25519 signatures to safely read and write encrypted data on public internet.
 
+### Installation
+
+```bash
+$ npm install --global @rusintez/skt
+```
+
 ### Usage
 
 ```bash
