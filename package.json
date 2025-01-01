@@ -1,8 +1,9 @@
 {
   "name": "@rusintez/skt",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
+  "homepage": "https://github.com/rusintez/secret-manager",
   "bin": {
     "skt": "src/cli.ts"
   },
