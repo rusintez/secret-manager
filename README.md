@@ -5,7 +5,7 @@ Use xsalsa20-poly1305 private key encryption and ed25519 signatures to safely re
 ### Installation
 
 ```bash
-$ npm install --global @rusintez/skt
+$ pnpm install --global @rusintez/skt
 ```
 
 ### Usage
