@@ -1,13 +1,15 @@
 import bs58 from "bs58";
 import nacl from "tweetnacl";
 
-export const encode = (str: string) => new TextEncoder().encode(str);
+export const encode = (...strs: string[]) =>
+  concat(...strs.map((str) => new TextEncoder().encode(str)));
+
 export const decode = (bytes: Uint8Array) => new TextDecoder().decode(bytes);
 
 export const verifySignature = (
   pubkey: Uint8Array,
   message: Uint8Array,
-  nonce: Uint8Array,
+  nonce: Uint8Array
 ) => {
   const data = nacl.sign.open(message, pubkey);
   if (!data) throw new Error("invalid signer");

@@ -16,9 +16,9 @@ import {
   encrypt,
   getBoxKeypair,
   getSignerKeypair,
-  input,
 } from "./helpers";
 import { client } from "./index";
+import { maskedInput } from "./prompt";
 
 const sktVaultUrl =
   process.env.SKT_VAULT || process.env.SKT_DEV
@@ -29,27 +29,21 @@ program
   //
   .command("token")
   .option("-n, --namespace <namespace>", "token name", "token")
-  .option("-d, --default", "writes token to user home for further use")
   .option("-f, --force", "overwrites previous default token (if present)")
-  .action((opts) => {
-    const keypair = createBoxKeypair();
-    const token = bs58.encode(keypair.secretKey);
+  .option("-i, --import", "import another key")
+  .action(async (opts) => {
+    const path = join(`${process.env.HOME}`, ".config", "skt");
+    mkdirpSync(path);
 
-    if (opts.default) {
-      const path = join(`${process.env.HOME}`, ".config", "skt");
-      mkdirpSync(path);
+    const keypair = opts.import
+      ? getBoxKeypair(await maskedInput("token: "))
+      : createBoxKeypair();
 
-      const filepath = join(path, opts.namespace);
+    const filepath = join(path, opts.namespace);
+    if (existsSync(filepath) && !opts.force)
+      throw new Error(`${filepath} already exists, use '--force' to overwrite`);
 
-      if (existsSync(filepath) && !opts.force)
-        throw new Error(
-          `${filepath} already exists, use '--force' to overwrite`,
-        );
-
-      writeFileSync(filepath, token);
-    } else {
-      console.log(token);
-    }
+    writeFileSync(filepath, bs58.encode(keypair.secretKey));
   });
 
 program
@@ -64,7 +58,7 @@ program
     const token = process.env.SKT_TOKEN || readFileSync(filepath, "utf8");
     const { secretKey, publicKey } = getBoxKeypair(token);
 
-    const val = value || (await input("value:"));
+    const val = value || (await maskedInput("value: "));
     const keyMessage = bs58.encode(nacl.hash(concat(encode(key), publicKey)));
     const valMessage = encrypt(val, secretKey);
 
@@ -81,8 +75,8 @@ program
     const challenge = bs58.encode(
       nacl.sign(
         concat(bs58.decode(nonce), bs58.decode(keyMessage)),
-        keypair.secretKey,
-      ),
+        keypair.secretKey
+      )
     );
 
     console.log(
@@ -90,7 +84,7 @@ program
         .write.$post({
           json: { key: keyMessage, value: valMessage, challenge },
         })
-        .then((res) => res.json()),
+        .then((res) => res.json())
     );
   });
 
@@ -120,8 +114,8 @@ program
     const challenge = bs58.encode(
       nacl.sign(
         concat(bs58.decode(nonce), bs58.decode(keyMessage)),
-        keypair.secretKey,
-      ),
+        keypair.secretKey
+      )
     );
 
     const res = await client(sktVaultUrl, jwt)
@@ -132,7 +126,7 @@ program
             key: string;
             value: string;
             message?: string;
-          }>,
+          }>
       );
 
     if (res.message) {

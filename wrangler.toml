@@ -1,12 +1,7 @@
 name = "secret-manager"
 main = "src/index.ts"
+account_id = "ec96c85e8eae01bdf4c37e6ce90a7cce"
 compatibility_date = "2024-12-18"
-compatibility_flags = [ "nodejs_compat" ]
-
-routes = [
-  { pattern = "skt.runcible.co", custom_domain = true }
-]
-
-[[kv_namespaces]]
-binding = "VAULT"
-id = "b3022adee68b4750bb40c8d945fa9743"
+compatibility_flags = ["nodejs_compat"]
+routes = [{ pattern = "skt.runcible.co", custom_domain = true }]
+kv_namespaces = [{ binding = "VAULT", id = "b3022adee68b4750bb40c8d945fa9743" }]
