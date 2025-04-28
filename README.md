@@ -11,9 +11,27 @@ $ pnpm install --global @rusintez/skt
 ### Usage
 
 ```bash
-$ export SKT_TOKEN=$(skt token) # outputs base58 encoded token
+$ skt token # generates a default token
 $ skt set GITHUB_TOKEN <some-value-here>
 $ skt get GITHUB_TOKEN # outputs "<some-value-here>"
+```
+
+### Namespaces
+
+On your machine
+
+```bash
+$ skt token --namespace staging
+$ skt set ENV staging --namespace staging
+$ skt get ENV # prints 'staging'
+$ skt token --export --namespace staging # prints token
+```
+
+On another machine
+
+```bash
+$ export SKT_TOKEN=<exported-token>
+$ skt get ENV # prints 'staging'
 ```
 
 ### Run your own vault
