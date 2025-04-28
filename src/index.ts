@@ -34,6 +34,7 @@ const app = new Hono<IEnv>()
       verifySignature(bs58.decode(pubkey), bs58.decode(challenge), payload);
 
       await c.env.VAULT.put(`${pubkey}/${key}`, JSON.stringify({ key, value }));
+
       return c.json({ ok: true });
     }
   )

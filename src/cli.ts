@@ -31,9 +31,18 @@ program
   .option("-n, --namespace <namespace>", "token name", "token")
   .option("-f, --force", "overwrites previous default token (if present)")
   .option("-i, --import", "import another key")
+  .option("-e, --export", "export key")
   .action(async (opts) => {
     const path = join(`${process.env.HOME}`, ".config", "skt");
     mkdirpSync(path);
+
+    if (opts.export) {
+      const home = process.env.HOME as string;
+      const filepath = join(home, ".config", "skt", opts.namespace);
+      const token = process.env.SKT_TOKEN || readFileSync(filepath, "utf8");
+      console.log(token);
+      return;
+    }
 
     const keypair = opts.import
       ? getBoxKeypair(await maskedInput("token: "))
